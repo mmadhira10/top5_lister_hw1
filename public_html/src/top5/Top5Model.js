@@ -84,7 +84,7 @@ export default class Top5Model {
     unselectAll() {
         for (let i = 0; i < this.top5Lists.length; i++) {
             let list = this.top5Lists[i];
-            this.view.unhighlightList(i);
+            this.view.unhighlightList(list.id);
         }
     }
 
@@ -98,7 +98,7 @@ export default class Top5Model {
                 // THIS IS THE LIST TO LOAD
                 this.currentList = list;
                 this.view.update(this.currentList);
-                this.view.highlightList(i);
+                this.view.highlightList(list.id);
                 found = true;
             }
             i++;
@@ -152,11 +152,32 @@ export default class Top5Model {
         this.saveLists();
     }
 
+    //renames the list
+    renameLists(text) {
+        this.currentList.name = text;
+        this.view.refreshLists(this.top5Lists);
+        this.saveLists();
+    }
+
     // SIMPLE UNDO/REDO FUNCTIONS
     undo() {
         if (this.tps.hasTransactionToUndo()) {
             this.tps.undoTransaction();
             this.view.updateToolbarButtons(this);
         }
+    }
+
+    // REMOVE SPECIFIC INDEX IN LIST
+    removeList(id)
+    {
+        for (let i = 0; i < this.top5Lists.length; i++) 
+        {
+            if(this.top5Lists[i].id === id)
+            {
+                this.top5Lists.splice(i, 1)
+            }
+        }
+        this.view.refreshLists(this.top5Lists);
+        this.saveLists();
     }
 }
