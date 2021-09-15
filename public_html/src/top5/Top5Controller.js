@@ -72,6 +72,14 @@ export default class Top5Controller {
             // GET THE SELECTED LIST
             this.model.loadList(id);
         }
+        // MOUSE OVER
+        document.getElementById("top5-list-" + id).onmouseover = (event) => {
+            this.model.mouseOver(id);
+        }
+        // UN-MOUSE OVER
+        document.getElementById("top5-list-" + id).onmouseout = (event) => {
+            this.model.unmouseOver(id);
+        }
         //RENAME LIST
         document.getElementById("top5-list-" + id).ondblclick = (event) => {
             let list = document.getElementById("top5-list-" + id);
@@ -85,7 +93,7 @@ export default class Top5Controller {
             textInput.setAttribute("type", "text");
             textInput.setAttribute("id", "top5-list-input-" + id);
             textInput.setAttribute("value", this.model.currentList.getName());
-
+            
             //adds parent with child
             list.appendChild(textInput); // changes to input
 
@@ -128,6 +136,7 @@ export default class Top5Controller {
             }
         }
     }
+
     ignoreParentClick(event) {
         event.cancelBubble = true;
         if (event.stopPropagation) event.stopPropagation();

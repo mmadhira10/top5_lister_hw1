@@ -180,4 +180,15 @@ export default class Top5Model {
         this.view.refreshLists(this.top5Lists);
         this.saveLists();
     }
+
+    // HIGHLIGHT LIST ON MOUSE OVER
+    mouseOver(id)
+    {
+        this.view.mousehighlightList(id);
+    }
+    // UNHIGHLIGHT LIST ON MOUSE PULL AWAY
+    unmouseOver(id)
+    {
+        this.view.mouseunhighlightList(id);
+    }
 }

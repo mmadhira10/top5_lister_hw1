@@ -188,6 +188,11 @@ input {
   background-color: var(--swatch-complement);
 }
 
+.mouse-is-over {
+  background-color: #111111;
+  color: white;
+}
+
 .disabled {
   background-color: lightgray;
 }

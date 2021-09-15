@@ -100,6 +100,19 @@ export default class Top5View {
         listCard.classList.remove("selected-list-card");
     }
 
+    mousehighlightList(listId)
+    {
+        let listCard = document.getElementById("top5-list-" + listId);
+        listCard.classList.add("mouse-is-over");
+    }
+
+    mouseunhighlightList(listId)
+    {
+        let listCard = document.getElementById("top5-list-" + listId);
+        listCard.classList.remove("mouse-is-over");
+    }
+
+
     updateToolbarButtons(model) {
         let tps = model.tps;
         if (!tps.hasTransactionToUndo()) {
