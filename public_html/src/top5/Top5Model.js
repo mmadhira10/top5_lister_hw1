@@ -153,9 +153,12 @@ export default class Top5Model {
     }
 
     //renames the list
-    renameLists(text) {
-        this.currentList.name = text;
+    renameLists(id, text) {
+        let index = this.getListIndex(id);
+        let lst = this.getList(index);
+        lst.name = text
         this.view.refreshLists(this.top5Lists);
+        this.view.highlightList(this.currentList.id);
         this.saveLists();
     }
 

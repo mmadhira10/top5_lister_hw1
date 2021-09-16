@@ -22,7 +22,7 @@ export default class Top5Controller {
             let newList = this.model.addNewList("Untitled", ["?","?","?","?","?"]);            
             this.model.loadList(newList.id);
             this.model.saveLists();
-            console.log(this.model);
+            //console.log(this.model);
         }
         document.getElementById("undo-button").onmousedown = (event) => {
             this.model.undo();
@@ -104,8 +104,9 @@ export default class Top5Controller {
         }
         //RENAME LIST
         document.getElementById("top5-list-" + id).ondblclick = (event) => {
+            //this.ignoreParentClick(event);
             let list = document.getElementById("top5-list-" + id);
-            console.log(this.model);
+            //console.log(this.model);
 
             // CLEAR THE TEXT
             list.innerHTML = "";
@@ -126,14 +127,14 @@ export default class Top5Controller {
                 if (event.key === 'Enter') {
                     //console.log(event);
                     //console.log(this.model);
-                    this.model.renameLists(event.target.value);
+                    this.model.renameLists(id, event.target.value);
                     this.model.clearStatus();
                     this.model.showStatus(id);
                 }
             }
             textInput.onblur = (event) => {
                 //this.model.restoreList();
-                this.model.renameLists(event.target.value);
+                this.model.renameLists(id, event.target.value);
                 this.model.clearStatus();
                 this.model.showStatus(id);
             }
