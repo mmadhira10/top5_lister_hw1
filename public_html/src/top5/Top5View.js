@@ -112,7 +112,6 @@ export default class Top5View {
         listCard.classList.remove("mouse-is-over");
     }
 
-
     updateToolbarButtons(model) {
         let tps = model.tps;
         if (!tps.hasTransactionToUndo()) {

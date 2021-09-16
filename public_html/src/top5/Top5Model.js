@@ -170,25 +170,61 @@ export default class Top5Model {
     // REMOVE SPECIFIC INDEX IN LIST
     removeList(id)
     {
-        for (let i = 0; i < this.top5Lists.length; i++) 
-        {
-            if(this.top5Lists[i].id === id)
-            {
-                this.top5Lists.splice(i, 1)
-            }
-        }
+        //for (let i = 0; i < this.top5Lists.length; i++) 
+        //{
+        //    if(this.top5Lists[i].id === id)
+        //    {
+        //        this.top5Lists.splice(i, 1)
+        //    }
+        //}
+        let index = this.getListIndex(id)
+        this.top5Lists.splice(index, 1)
         this.view.refreshLists(this.top5Lists);
+        if( this.currentList.id == id)
+        {
+            this.view.clearWorkspace();
+            this.clearStatus();
+        }
+        else{
+            this.view.highlightList(this.currentList.id);
+        }
         this.saveLists();
     }
 
-    // HIGHLIGHT LIST ON MOUSE OVER
+    // HIGHLIGHT LIST ON MOUSE
     mouseOver(id)
     {
         this.view.mousehighlightList(id);
     }
-    // UNHIGHLIGHT LIST ON MOUSE PULL AWAY
+    //UNHIGHLIGHT
     unmouseOver(id)
     {
         this.view.mouseunhighlightList(id);
+    }
+
+    //IMPLEMENT THE MOVE AROUND 
+    moveAround(oldid, newid)
+    {
+        this.currentList.moveItem(oldid - 1, newid - 1);
+        this.restoreList();
+        this.saveLists();
+    }
+
+    //
+    showStatus(id)
+    {
+        let i = this.getListIndex(id);
+        let list = this.getList(i);
+        //console.log(list);
+        let txt = document.createTextNode("Top 5 " + list.getName());
+        let p = document.getElementById("top5-statusbar");
+        
+        //console.log(txt);
+        p.appendChild(txt);
+    }
+
+    clearStatus()
+    {
+        document.getElementById("top5-statusbar").innerHTML = "";
     }
 }

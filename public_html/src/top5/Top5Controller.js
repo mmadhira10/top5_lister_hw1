@@ -61,6 +61,25 @@ export default class Top5Controller {
                     }
                 }
             }
+            item.draggable = true;
+            item.ondragstart = (event) =>
+            {
+                event.dataTransfer.setData("text", event.target.id);
+                //console.log(event.dataTransfer.getData("text"))
+            }
+            item.ondragover = (event) =>
+            {
+                event.preventDefault();
+            }
+            item.ondrop = (event) =>
+            {
+                event.preventDefault();
+                let data = event.dataTransfer.getData("text");
+                let num = data.substring(data.indexOf('-') + 1);
+                let num1 = event.target.id.substring(event.target.id.indexOf('-') + 1);
+                this.model.moveAround(num, num1);
+                //console.log(str);
+            }
         }
     }
 
@@ -71,6 +90,9 @@ export default class Top5Controller {
 
             // GET THE SELECTED LIST
             this.model.loadList(id);
+
+            this.model.clearStatus();
+            this.model.showStatus(id);
         }
         // MOUSE OVER
         document.getElementById("top5-list-" + id).onmouseover = (event) => {
@@ -105,11 +127,15 @@ export default class Top5Controller {
                     //console.log(event);
                     //console.log(this.model);
                     this.model.renameLists(event.target.value);
+                    this.model.clearStatus();
+                    this.model.showStatus(id);
                 }
             }
             textInput.onblur = (event) => {
                 //this.model.restoreList();
                 this.model.renameLists(event.target.value);
+                this.model.clearStatus();
+                this.model.showStatus(id);
             }
         }
         // FOR DELETING THE LIST
