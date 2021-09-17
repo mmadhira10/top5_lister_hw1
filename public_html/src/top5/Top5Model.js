@@ -1,6 +1,7 @@
 import jsTPS from "../common/jsTPS.js"
 import Top5List from "./Top5List.js";
 import ChangeItem_Transaction from "./transactions/ChangeItem_Transaction.js"
+import MoveItem_Transaction from "./transactions/MoveItem_Transaction.js"
 
 /**
  * Top5Model.js
@@ -170,6 +171,13 @@ export default class Top5Model {
         }
     }
 
+    redo() {
+        if (this.tps.hasTransactionToRedo()) {
+            this.tps.doTransaction();
+            this.view.updateToolbarButtons(this);
+        }
+    }
+
     // REMOVE SPECIFIC INDEX IN LIST
     removeList(id)
     {
@@ -205,29 +213,39 @@ export default class Top5Model {
         this.view.mouseunhighlightList(id);
     }
 
-    //IMPLEMENT THE MOVE AROUND 
-    moveAround(oldid, newid)
+    //IMPLEMENT THE DRAG AND DROP
+    moveItem(oldid, newid)
     {
         this.currentList.moveItem(oldid - 1, newid - 1);
         this.restoreList();
         this.saveLists();
     }
 
-    //
+    // 
     showStatus(id)
     {
         let i = this.getListIndex(id);
         let list = this.getList(i);
-        //console.log(list);
         let txt = document.createTextNode("Top 5 " + list.getName());
         let p = document.getElementById("top5-statusbar");
         
-        //console.log(txt);
         p.appendChild(txt);
     }
 
     clearStatus()
     {
         document.getElementById("top5-statusbar").innerHTML = "";
+    }
+
+    moveItemTransaction = (moveId, dropId) => {
+        let transaction = new MoveItem_Transaction(this, moveId, dropId);
+        this.tps.addTransaction(transaction);
+    }
+
+    cancelButton()
+    {
+        this.clearStatus();
+        this.view.unhighlightList(this.currentList.id);
+        this.view.clearWorkspace();
     }
 }

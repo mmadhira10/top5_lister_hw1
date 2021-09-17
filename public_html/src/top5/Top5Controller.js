@@ -8,6 +8,7 @@
  */
 export default class Top5Controller {
     constructor() {
+
     }
 
 
@@ -24,8 +25,17 @@ export default class Top5Controller {
             this.model.saveLists();
             //console.log(this.model);
         }
+
         document.getElementById("undo-button").onmousedown = (event) => {
             this.model.undo();
+        }
+
+        document.getElementById("redo-button").onmousedown = (event) => {
+            this.model.redo();
+        }
+        
+        document.getElementById("close-button").onmousedown = (event) => {
+            this.model.cancelButton();
         }
 
         // SETUP THE ITEM HANDLERS
@@ -77,8 +87,8 @@ export default class Top5Controller {
                 let data = event.dataTransfer.getData("text");
                 let num = data.substring(data.indexOf('-') + 1);
                 let num1 = event.target.id.substring(event.target.id.indexOf('-') + 1);
-                this.model.moveAround(num, num1);
-                //console.log(str);
+                //this.model.moveAround(num, num1);
+                this.model.moveItemTransaction(num, num1);
             }
         }
     }
