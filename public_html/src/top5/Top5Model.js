@@ -161,8 +161,15 @@ export default class Top5Model {
     addChangeItemTransaction = (id, newText) => {
         // GET THE CURRENT TEXT
         let oldText = this.currentList.items[id];
-        let transaction = new ChangeItem_Transaction(this, id, oldText, newText);
-        this.tps.addTransaction(transaction);
+        if( oldText !== newText )
+        {
+            let transaction = new ChangeItem_Transaction(this, id, oldText, newText);
+            this.tps.addTransaction(transaction);
+        }
+        else
+        {
+            this.view.update(this.currentList);
+        }
         this.view.updateToolbarButtons(this);
     }
 
@@ -207,13 +214,14 @@ export default class Top5Model {
         //        this.top5Lists.splice(i, 1)
         //    }
         //}
+        let currId;
         let index = this.getListIndex(id)
         this.top5Lists.splice(index, 1)
-        this.view.refreshLists(this.top5Lists);
         if ( this.hasCurrentList() )
         {
             if( this.currentList.id == id)
             {
+                this.currentList = null;
                 this.view.clearWorkspace();
                 this.clearStatus();
                 this.view.enableButton("add-list-button");
@@ -221,12 +229,15 @@ export default class Top5Model {
                 this.tps.clearAllTransactions();
                 this.view.updateToolbarButtons(this);
             }
-            else
-            {
-                this.view.highlightList(this.currentList.id);
+            else{
+                currId = this.currentList.id;
             }
         }
-        
+        this.view.refreshLists(this.top5Lists);
+        if (currId != null)
+        {
+            this.view.highlightList(currId);
+        }
         this.saveLists();
     }
 
@@ -267,8 +278,15 @@ export default class Top5Model {
     }
 
     moveItemTransaction = (moveId, dropId) => {
-        let transaction = new MoveItem_Transaction(this, moveId, dropId);
-        this.tps.addTransaction(transaction);
+        if ( moveId !== dropId )
+        {
+            let transaction = new MoveItem_Transaction(this, moveId, dropId);
+            this.tps.addTransaction(transaction);
+        } 
+        else
+        {
+            this.view.update(this.currentList);
+        }
         this.view.updateToolbarButtons(this);
     }
 

@@ -25,6 +25,7 @@ export default class Top5Controller {
             this.model.showStatus(newList.id);
             let listCard = document.getElementById("add-list-button");
             listCard.classList.add("disabled");
+            listCard.disabled = true;
             this.model.saveLists();
         }
 
