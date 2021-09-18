@@ -210,18 +210,23 @@ export default class Top5Model {
         let index = this.getListIndex(id)
         this.top5Lists.splice(index, 1)
         this.view.refreshLists(this.top5Lists);
-        if( this.currentList.id == id)
+        if ( this.hasCurrentList() )
         {
-            this.view.clearWorkspace();
-            this.clearStatus();
-            this.view.enableButton("add-list-button");
-            this.view.disableButton("close-button");
-            this.tps.clearAllTransactions();
-            this.view.updateToolbarButtons(this);
+            if( this.currentList.id == id)
+            {
+                this.view.clearWorkspace();
+                this.clearStatus();
+                this.view.enableButton("add-list-button");
+                this.view.disableButton("close-button");
+                this.tps.clearAllTransactions();
+                this.view.updateToolbarButtons(this);
+            }
+            else
+            {
+                this.view.highlightList(this.currentList.id);
+            }
         }
-        else{
-            this.view.highlightList(this.currentList.id);
-        }
+        
         this.saveLists();
     }
 
@@ -276,6 +281,7 @@ export default class Top5Model {
         this.view.disableButton("close-button");
         this.view.updateToolbarButtons(this);
         this.view.enableButton("add-list-button");
+        this.currentList = null;
         //listCard.disabled = true;
     }
 }

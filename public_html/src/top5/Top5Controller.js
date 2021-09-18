@@ -21,8 +21,11 @@ export default class Top5Controller {
         document.getElementById("add-list-button").onmousedown = (event) => {
             let newList = this.model.addNewList("Untitled", ["?","?","?","?","?"]);            
             this.model.loadList(newList.id);
+            this.model.clearStatus();
+            this.model.showStatus(newList.id);
+            let listCard = document.getElementById("add-list-button");
+            listCard.classList.add("disabled");
             this.model.saveLists();
-            //console.log(this.model);
         }
 
         document.getElementById("undo-button").onmousedown = (event) => {
