@@ -11,7 +11,6 @@ export default class Top5Controller {
 
     }
 
-
     setModel(initModel) {
         this.model = initModel;
         this.initHandlers();
@@ -33,7 +32,7 @@ export default class Top5Controller {
         document.getElementById("redo-button").onmousedown = (event) => {
             this.model.redo();
         }
-        
+
         document.getElementById("close-button").onmousedown = (event) => {
             this.model.cancelButton();
         }
@@ -101,7 +100,11 @@ export default class Top5Controller {
             // GET THE SELECTED LIST
             this.model.loadList(id);
 
+            // 
             this.model.clearStatus();
+            let listCard = document.getElementById("add-list-button");
+            listCard.classList.add("disabled");
+            listCard.disabled = true;
             this.model.showStatus(id);
         }
         // MOUSE OVER
@@ -112,6 +115,7 @@ export default class Top5Controller {
         document.getElementById("top5-list-" + id).onmouseout = (event) => {
             this.model.unmouseOver(id);
         }
+
         //RENAME LIST
         document.getElementById("top5-list-" + id).ondblclick = (event) => {
             //this.ignoreParentClick(event);

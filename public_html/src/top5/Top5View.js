@@ -79,11 +79,13 @@ export default class Top5View {
     disableButton(id) {
         let button = document.getElementById(id);
         button.classList.add("disabled");
+        button.disabled = true;
     }
 
     enableButton(id) {
         let button = document.getElementById(id);
         button.classList.remove("disabled");
+        button.disabled = false;
     }
 
     highlightList(listId) {
@@ -120,7 +122,7 @@ export default class Top5View {
         else {
             this.enableButton("undo-button");
         }  
-         
+
         if (!tps.hasTransactionToRedo()) {
             this.disableButton("redo-button");
         }

@@ -93,6 +93,14 @@ export default class Top5Model {
         let list = null;
         let found = false;
         let i = 0;
+
+        //Bug: This is for the bug if you click deleting transactions
+        let oldId;
+        if (this.currentList != null)
+        {
+            oldId = this.currentList.id;
+        }
+
         while ((i < this.top5Lists.length) && !found) {
             list = this.top5Lists[i];
             if (list.id === id) {
@@ -104,13 +112,23 @@ export default class Top5Model {
             }
             i++;
         }
-        this.tps.clearAllTransactions();
+
+        //Bug: This is for the bug if you click deleting transactions
+        if(oldId == null || oldId != this.currentList.id)
+        {
+            this.tps.clearAllTransactions();
+        }
         this.view.updateToolbarButtons(this);
+        let listCard = document.getElementById("close-button");
+        listCard.classList.remove("disabled");
+        listCard.disabled = false;
     }
 
     loadLists() {
         // CHECK TO SEE IF THERE IS DATA IN LOCAL STORAGE FOR THIS APP
         let recentLists = localStorage.getItem("recent_work");
+        this.view.disableButton("close-button");
+        this.view.updateToolbarButtons(this);
         if (!recentLists) {
             return false;
         }
@@ -126,9 +144,9 @@ export default class Top5Model {
                 this.addNewList(listData.name, items);
             }
             this.sortLists();   
-            this.view.refreshLists(this.top5Lists);
+            this.view.refreshLists(this.top5Lists);   
             return true;
-        }        
+        }    
     }
 
     saveLists() {
@@ -145,6 +163,7 @@ export default class Top5Model {
         let oldText = this.currentList.items[id];
         let transaction = new ChangeItem_Transaction(this, id, oldText, newText);
         this.tps.addTransaction(transaction);
+        this.view.updateToolbarButtons(this);
     }
 
     changeItem(id, text) {
@@ -195,6 +214,10 @@ export default class Top5Model {
         {
             this.view.clearWorkspace();
             this.clearStatus();
+            this.view.enableButton("add-list-button");
+            this.view.disableButton("close-button");
+            this.tps.clearAllTransactions();
+            this.view.updateToolbarButtons(this);
         }
         else{
             this.view.highlightList(this.currentList.id);
@@ -207,13 +230,13 @@ export default class Top5Model {
     {
         this.view.mousehighlightList(id);
     }
-    //UNHIGHLIGHT
+    // UNHIGHLIGHT
     unmouseOver(id)
     {
         this.view.mouseunhighlightList(id);
     }
 
-    //IMPLEMENT THE DRAG AND DROP
+    // IMPLEMENT THE DRAG AND DROP
     moveItem(oldid, newid)
     {
         this.currentList.moveItem(oldid - 1, newid - 1);
@@ -221,7 +244,7 @@ export default class Top5Model {
         this.saveLists();
     }
 
-    // 
+    // SHOW THE LIST IN THE STATUS BAR
     showStatus(id)
     {
         let i = this.getListIndex(id);
@@ -232,6 +255,7 @@ export default class Top5Model {
         p.appendChild(txt);
     }
 
+    // CLEAR THE VALUE IN THE STATUS BAR
     clearStatus()
     {
         document.getElementById("top5-statusbar").innerHTML = "";
@@ -240,6 +264,7 @@ export default class Top5Model {
     moveItemTransaction = (moveId, dropId) => {
         let transaction = new MoveItem_Transaction(this, moveId, dropId);
         this.tps.addTransaction(transaction);
+        this.view.updateToolbarButtons(this);
     }
 
     cancelButton()
@@ -247,5 +272,10 @@ export default class Top5Model {
         this.clearStatus();
         this.view.unhighlightList(this.currentList.id);
         this.view.clearWorkspace();
+        this.tps.clearAllTransactions();
+        this.view.disableButton("close-button");
+        this.view.updateToolbarButtons(this);
+        this.view.enableButton("add-list-button");
+        //listCard.disabled = true;
     }
 }
